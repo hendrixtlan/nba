@@ -15,3 +15,7 @@ Relevant official documentation:
 - Azure ML datastores (including OneLake): https://learn.microsoft.com/en-us/azure/machine-learning/how-to-datastore
 - Azure ML model registration: https://learn.microsoft.com/en-us/azure/machine-learning/how-to-manage-models
 - Azure ML managed online endpoint authentication: https://learn.microsoft.com/en-us/azure/machine-learning/how-to-authenticate-online-endpoint
+
+- Use Foundry Agent Service with LangGraph: https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/langchain-agents
+- Evaluate AI agents in Microsoft Foundry: https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/evaluate-agent
+- Set up tracing for AI agents in Microsoft Foundry: https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup

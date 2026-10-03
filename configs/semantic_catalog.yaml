@@ -1,0 +1,24 @@
+catalog_version: "2026-10-03.1"
+terms:
+  expected_utility:
+    label: "Expected Utility"
+    definition: "Expected response value after subtracting explicit discount, contact, and risk costs."
+    formula: "P(response) * expected_margin - discount_cost - contact_cost - risk_penalty"
+    owner: "Commercial Decision Science"
+  propensity:
+    label: "Response Propensity"
+    definition: "Calibrated probability that a customer responds positively to an eligible candidate action under the predictive model."
+    owner: "Data Science"
+  incremental_margin:
+    label: "Incremental Margin"
+    definition: "Margin attributable to an intervention relative to the relevant counterfactual or control condition."
+    owner: "Revenue Growth Management"
+  uplift:
+    label: "Treatment Uplift"
+    definition: "Estimated difference between the probability of an outcome under treatment and under no treatment for a comparable customer context."
+    formula: "P(Y=1|T=1,X) - P(Y=1|T=0,X)"
+    owner: "Data Science"
+  no_action:
+    label: "No Action"
+    definition: "Governed fallback selected when no eligible commercial action exceeds the minimum utility threshold."
+    owner: "Commercial Governance"

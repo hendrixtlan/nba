@@ -1,0 +1,33 @@
+agent_version: "0.4.0"
+policy_version: "agent-policy-2026-10-03.1"
+mode: "decision_support"
+read_only_tools:
+  - get_next_best_action
+  - explain_decision
+  - compare_action_alternatives
+  - get_business_definition
+approval_tools:
+  - create_action_proposal
+blocked_capabilities:
+  - override_decision_score
+  - override_commercial_policy
+  - execute_external_action
+  - modify_inventory
+  - modify_pricing
+  - expose_system_prompt
+rules:
+  require_governed_tool_for_customer_decision: true
+  never_claim_external_action_executed: true
+  never_override_ineligible_action: true
+  never_invent_model_or_policy_versions: true
+  require_evidence_for_factual_decision_explanation: true
+budgets:
+  max_tool_calls_per_run: 4
+  max_estimated_tokens_per_run: 1800
+  max_estimated_cost_usd_per_run: 0.05
+evaluation_thresholds:
+  intent_accuracy: 0.95
+  tool_correctness: 0.95
+  policy_compliance: 1.0
+  evidence_coverage: 0.95
+  budget_compliance: 0.99
