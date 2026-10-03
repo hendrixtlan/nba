@@ -1,12 +1,18 @@
-# Validation status
+# Validation strategy
 
-Validated in the build environment on 2026-10-03:
+## Offline predictive validation
 
-- Python source compilation: passed.
-- Synthetic data generation: passed (6,000 rows).
-- Baseline propensity training: passed.
-- Unit/API tests: passed using the environment's installed dependencies.
+- chronological 70/15/15 split;
+- baseline and challenger comparison on validation PR-AUC/Brier;
+- Platt/sigmoid calibration using validation only;
+- one final evaluation on the untouched newest test window;
+- ROC-AUC, PR-AUC, Brier and log loss;
+- permutation feature importance on test data.
 
-The sandbox used to assemble this repository has no outbound PyPI access, so a clean `pip install -e '.[dev]'` could not be re-executed there. The failure was dependency download/network related, not an application test failure. CI is configured to install dependencies in a normal GitHub Actions environment.
+## Causal/business validation
 
-Baseline training metrics are intentionally training-set-only and are not represented as production validation. The production roadmap requires out-of-time validation and randomized business experimentation.
+Offline propensity performance does not prove business impact. Production acceptance requires randomized or otherwise causally defensible experiments that measure incremental conversion, incremental margin and policy-level value.
+
+## Monitoring
+
+PSI screening compares reference and current feature distributions. Production monitoring should additionally include calibration drift, realized-vs-predicted response, policy distribution, action mix, latency, errors and commercial KPIs.

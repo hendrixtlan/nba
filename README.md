@@ -1,5 +1,7 @@
 # LATAM Next Best Action + Agentic AI
 
+**Version 0.2 — Production Data Science**
+
 Production-shaped reference implementation for a governed **Next Best Action (NBA)** decisioning system with an **agentic explanation and orchestration layer**.
 
 The project demonstrates how predictive modeling, prescriptive ranking, governed enterprise data, agentic AI, evaluation, observability, and MLOps can be combined for commercial decision support.
@@ -92,8 +94,7 @@ Requirements: Python 3.11+
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\\Scripts\\activate
 pip install -e '.[dev]'
-python scripts/generate_synthetic_data.py
-python scripts/train_propensity_model.py
+make pipeline
 uvicorn nba.api.app:app --reload
 ```
 
@@ -144,15 +145,20 @@ This project intentionally separates five forms of evaluation:
 
 - [x] Domain model and deterministic decision pipeline
 - [x] Synthetic commercial dataset generator
-- [x] Baseline propensity model training
+- [x] Temporal train/validation/test split
+- [x] Baseline + nonlinear challenger model selection
+- [x] Held-out probability calibration and untouched test evaluation
+- [x] Model manifest, artifact hash and permutation importance
+- [x] Data drift monitoring with PSI
+- [x] Randomized synthetic experiment + T-learner uplift baseline
 - [x] FastAPI decision endpoint
 - [x] Agent-facing decision explanation tool
 - [x] Unit tests and CI
 - [ ] Fabric/OneLake production adapter
 - [ ] Azure ML managed training + model registry
 - [ ] Microsoft Foundry hosted agent integration
-- [ ] Uplift model / treatment-effect estimator
-- [ ] Experiment assignment and A/B measurement service
+- [x] Uplift model / treatment-effect estimator baseline
+- [ ] Online experiment assignment and A/B measurement service
 - [ ] Model, data and agent observability dashboards
 - [ ] Infrastructure-as-code deployment
 
@@ -166,3 +172,29 @@ This project intentionally separates five forms of evaluation:
 - Cloud dependencies sit behind adapters so the business logic remains portable and testable.
 
 See `docs/ARCHITECTURE.md` for the full design.
+
+
+## v0.2 production-ML outputs
+
+Running `make pipeline` produces:
+
+- `artifacts/propensity.joblib` — calibrated selected model.
+- `artifacts/model_manifest.json` — registry-style provenance and artifact hash.
+- `artifacts/metrics.json` — candidate comparison plus untouched-test metrics.
+- `artifacts/feature_importance.json` — permutation importance.
+- `artifacts/drift_report.json` — PSI-based feature drift report.
+- `artifacts/uplift.joblib` and `uplift_metrics.json` — causal/uplift baseline.
+- `artifacts/shap_importance.json` — optional global SHAP explanation summary (`make install-ml && make explain`).
+
+See `docs/PRODUCTION_ML.md`, `docs/DRIFT_MONITORING.md`, and `docs/UPLIFT.md`.
+
+
+## Experiment assignment
+
+`nba.experimentation.assign_variant` uses a salted SHA-256 bucket to provide deterministic, sticky treatment/control assignment. Assignment is separated from outcome modeling so experimentation can be audited and reproduced independently of the recommender.
+
+## CI/CD surfaces
+
+- `ci.yml` validates code quality and API/unit contracts.
+- `model-pipeline.yml` regenerates deterministic data, trains candidate models, evaluates uplift/drift/SHAP, runs tests, and publishes validation artifacts for review.
+- `Dockerfile` packages only the API source, configuration and selected model artifacts for inference.

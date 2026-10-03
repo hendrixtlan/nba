@@ -1,6 +1,53 @@
 {
-  "roc_auc_train": 0.6622,
-  "pr_auc_train": 0.6673,
-  "brier_train": 0.2295,
-  "warning": "Training-set metrics only; replace with temporal/out-of-time validation in production."
+  "selection_metric": "validation_pr_auc_then_brier",
+  "winner": "logistic_regression",
+  "candidate_comparison": {
+    "logistic_regression": {
+      "validation": {
+        "roc_auc": 0.653397,
+        "pr_auc": 0.686798,
+        "brier": 0.22905,
+        "log_loss": 0.649651,
+        "positive_rate": 0.556111,
+        "mean_prediction": 0.539435
+      }
+    },
+    "xgboost": {
+      "validation": {
+        "roc_auc": 0.632491,
+        "pr_auc": 0.66923,
+        "brier": 0.235739,
+        "log_loss": 0.664728,
+        "positive_rate": 0.556111,
+        "mean_prediction": 0.541968
+      }
+    }
+  },
+  "test_calibrated": {
+    "roc_auc": 0.636324,
+    "pr_auc": 0.661544,
+    "brier": 0.233073,
+    "log_loss": 0.658039,
+    "positive_rate": 0.546111,
+    "mean_prediction": 0.558285
+  },
+  "temporal_windows": {
+    "train": {
+      "rows": 8400,
+      "start": "2025-01-01T04:00:00+00:00",
+      "end": "2026-03-21T09:00:00+00:00"
+    },
+    "validation": {
+      "rows": 1800,
+      "start": "2026-03-21T10:00:00+00:00",
+      "end": "2026-06-24T04:00:00+00:00"
+    },
+    "test": {
+      "rows": 1800,
+      "start": "2026-06-24T05:00:00+00:00",
+      "end": "2026-09-30T23:00:00+00:00"
+    }
+  },
+  "calibration": "platt_sigmoid_on_validation_window",
+  "warning": "Synthetic portfolio data; test window was untouched during model selection and calibration."
 }

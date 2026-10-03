@@ -32,7 +32,7 @@ class CandidateAction(BaseModel):
 class ScoredAction(BaseModel):
     action_id: str
     action_type: str
-    propensity: float = Field(ge=0, le=1)
+    propensity: float | None = Field(default=None, ge=0, le=1)
     gross_expected_value: float
     expected_utility: float
     eligible: bool
@@ -43,7 +43,7 @@ class DecisionResponse(BaseModel):
     customer_id: str
     selected_action: str
     expected_utility: float
-    propensity: float
+    propensity: float | None
     policy_version: str
     model_version: str
     rationale_codes: list[str]

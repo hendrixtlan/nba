@@ -8,9 +8,16 @@ import pandas as pd
 RNG = np.random.default_rng(42)
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "sample" / "training.csv"
+UPLIFT_OUT = ROOT / "data" / "sample" / "uplift.csv"
+START = pd.Timestamp("2025-01-01", tz="UTC")
+DAYS = 638  # through late September 2026
 
 
-def main(n: int = 6000) -> None:
+def _sigmoid(value: float) -> float:
+    return float(1 / (1 + np.exp(-value)))
+
+
+def main(n: int = 12000, uplift_n: int = 8000) -> None:
     actions = ["promote_core_pack", "premium_bundle", "targeted_discount", "sales_visit"]
     action_types = {
         "promote_core_pack": "product_recommendation",
@@ -27,17 +34,22 @@ def main(n: int = 6000) -> None:
 
     rows = []
     for i in range(n):
+        day = int(RNG.integers(0, DAYS))
+        event_ts = START + pd.Timedelta(days=day, hours=int(RNG.integers(0, 24)))
+        progress = day / DAYS
         action_id = RNG.choice(actions)
         margin, discount, contact, price, risk = economics[action_id]
-        affinity = RNG.beta(4, 2)
-        discount_response = RNG.beta(2.5, 3)
-        price_sensitivity = RNG.beta(2, 3)
-        freq = int(RNG.poisson(5))
+        affinity = float(np.clip(RNG.beta(4, 2) + 0.05 * progress, 0, 1))
+        discount_response = float(np.clip(RNG.beta(2.5, 3) + 0.04 * progress, 0, 1))
+        price_sensitivity = float(np.clip(RNG.beta(2, 3) + 0.03 * progress, 0, 1))
+        freq = int(RNG.poisson(5 + 0.6 * progress))
         recency = int(RNG.integers(0, 31))
-        avg_ticket = float(np.clip(RNG.normal(330, 85), 80, 700))
+        avg_ticket = float(np.clip(RNG.normal(325 + 25 * progress, 85), 80, 700))
         contact_count = int(RNG.integers(0, 4))
-        channel = RNG.choice(["traditional_trade", "modern_trade", "digital"])
+        channel_probs = np.array([0.50 - 0.08 * progress, 0.35, 0.15 + 0.08 * progress])
+        channel = RNG.choice(["traditional_trade", "modern_trade", "digital"], p=channel_probs)
         region = RNG.choice(["MX-CENTRAL", "MX-NORTH", "BR-SE", "CO-ANDES"])
+        seasonality = 0.14 * np.sin(2 * np.pi * event_ts.dayofyear / 365.25)
 
         logit = (
             -1.1
@@ -48,12 +60,16 @@ def main(n: int = 6000) -> None:
             - 0.02 * recency
             - 0.22 * contact_count
             + 0.25 * (action_id == "promote_core_pack")
+            + seasonality
+            - 0.18 * progress * (action_id == "targeted_discount")
         )
-        p = 1 / (1 + np.exp(-logit))
+        p = _sigmoid(logit)
         response = int(RNG.random() < p)
 
         rows.append(
             {
+                "event_timestamp": event_ts.isoformat(),
+                "customer_id": f"C{int(RNG.integers(1, 2501)):05d}",
                 "avg_ticket": avg_ticket,
                 "purchase_frequency_30d": freq,
                 "days_since_last_purchase": recency,
@@ -74,9 +90,43 @@ def main(n: int = 6000) -> None:
             }
         )
 
+    uplift_rows = []
+    for i in range(uplift_n):
+        day = int(RNG.integers(0, DAYS))
+        event_ts = START + pd.Timedelta(days=day)
+        affinity = float(RNG.beta(4, 2))
+        discount_response = float(RNG.beta(2.5, 3))
+        price_sensitivity = float(RNG.beta(2, 3))
+        freq = int(RNG.poisson(5))
+        avg_ticket = float(np.clip(RNG.normal(335, 90), 80, 700))
+        treatment = int(RNG.random() < 0.5)  # randomized synthetic experiment
+        base_logit = -1.15 + 1.55 * affinity + 0.06 * min(freq, 10) - 0.75 * price_sensitivity
+        treatment_logit_effect = 1.15 * discount_response - 0.55 * price_sensitivity - 0.12
+        p0 = _sigmoid(base_logit)
+        p1 = _sigmoid(base_logit + treatment_logit_effect)
+        response = int(RNG.random() < (p1 if treatment else p0))
+        uplift_rows.append(
+            {
+                "event_timestamp": event_ts.isoformat(),
+                "customer_id": f"U{int(RNG.integers(1, 3001)):05d}",
+                "avg_ticket": avg_ticket,
+                "purchase_frequency_30d": freq,
+                "category_affinity": affinity,
+                "historical_discount_response": discount_response,
+                "price_sensitivity": price_sensitivity,
+                "channel": RNG.choice(["traditional_trade", "modern_trade", "digital"]),
+                "region": RNG.choice(["MX-CENTRAL", "MX-NORTH", "BR-SE", "CO-ANDES"]),
+                "treatment": treatment,
+                "response": response,
+                "true_uplift": p1 - p0,
+            }
+        )
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(OUT, index=False)
-    print(f"Wrote {n} rows to {OUT}")
+    pd.DataFrame(rows).sort_values("event_timestamp").to_csv(OUT, index=False)
+    pd.DataFrame(uplift_rows).sort_values("event_timestamp").to_csv(UPLIFT_OUT, index=False)
+    print(f"Wrote {n} propensity rows to {OUT}")
+    print(f"Wrote {uplift_n} randomized uplift rows to {UPLIFT_OUT}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,110 @@
+[
+  {
+    "feature": "num__category_affinity",
+    "mean_abs_shap": 0.30537012
+  },
+  {
+    "feature": "num__contact_count_7d",
+    "mean_abs_shap": 0.23900545
+  },
+  {
+    "feature": "num__purchase_frequency_30d",
+    "mean_abs_shap": 0.12717347
+  },
+  {
+    "feature": "num__action_expected_margin",
+    "mean_abs_shap": 0.1232628
+  },
+  {
+    "feature": "num__days_since_last_purchase",
+    "mean_abs_shap": 0.12294898
+  },
+  {
+    "feature": "num__price_sensitivity",
+    "mean_abs_shap": 0.09063076
+  },
+  {
+    "feature": "num__action_risk_penalty",
+    "mean_abs_shap": 0.07989852
+  },
+  {
+    "feature": "num__avg_ticket",
+    "mean_abs_shap": 0.07656807
+  },
+  {
+    "feature": "num__action_price",
+    "mean_abs_shap": 0.05854478
+  },
+  {
+    "feature": "cat__region_MX-CENTRAL",
+    "mean_abs_shap": 0.03973317
+  },
+  {
+    "feature": "num__action_discount_cost",
+    "mean_abs_shap": 0.03923556
+  },
+  {
+    "feature": "num__historical_discount_response",
+    "mean_abs_shap": 0.03016367
+  },
+  {
+    "feature": "cat__action_type_bundle",
+    "mean_abs_shap": 0.02969833
+  },
+  {
+    "feature": "cat__action_id_premium_bundle",
+    "mean_abs_shap": 0.02969833
+  },
+  {
+    "feature": "cat__channel_digital",
+    "mean_abs_shap": 0.02623049
+  },
+  {
+    "feature": "cat__action_type_product_recommendation",
+    "mean_abs_shap": 0.02177992
+  },
+  {
+    "feature": "cat__action_id_promote_core_pack",
+    "mean_abs_shap": 0.02177992
+  },
+  {
+    "feature": "num__action_contact_cost",
+    "mean_abs_shap": 0.02066032
+  },
+  {
+    "feature": "cat__action_type_promotion",
+    "mean_abs_shap": 0.02030088
+  },
+  {
+    "feature": "cat__action_id_targeted_discount",
+    "mean_abs_shap": 0.02030088
+  },
+  {
+    "feature": "cat__region_CO-ANDES",
+    "mean_abs_shap": 0.01259329
+  },
+  {
+    "feature": "cat__region_MX-NORTH",
+    "mean_abs_shap": 0.01159401
+  },
+  {
+    "feature": "cat__channel_modern_trade",
+    "mean_abs_shap": 0.00969516
+  },
+  {
+    "feature": "cat__action_type_human_followup",
+    "mean_abs_shap": 0.00933028
+  },
+  {
+    "feature": "cat__action_id_sales_visit",
+    "mean_abs_shap": 0.00933028
+  },
+  {
+    "feature": "cat__region_BR-SE",
+    "mean_abs_shap": 0.00708149
+  },
+  {
+    "feature": "cat__channel_traditional_trade",
+    "mean_abs_shap": 0.00416152
+  }
+]

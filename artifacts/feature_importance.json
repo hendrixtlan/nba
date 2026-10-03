@@ -1,0 +1,82 @@
+[
+  {
+    "feature": "category_affinity",
+    "importance_mean": 0.049835,
+    "importance_std": 0.00655
+  },
+  {
+    "feature": "contact_count_7d",
+    "importance_mean": 0.013306,
+    "importance_std": 0.006671
+  },
+  {
+    "feature": "days_since_last_purchase",
+    "importance_mean": 0.010247,
+    "importance_std": 0.005045
+  },
+  {
+    "feature": "purchase_frequency_30d",
+    "importance_mean": 0.009216,
+    "importance_std": 0.002354
+  },
+  {
+    "feature": "avg_ticket",
+    "importance_mean": 0.007786,
+    "importance_std": 0.00294
+  },
+  {
+    "feature": "action_expected_margin",
+    "importance_mean": 0.007713,
+    "importance_std": 0.001514
+  },
+  {
+    "feature": "action_risk_penalty",
+    "importance_mean": 0.006217,
+    "importance_std": 0.001411
+  },
+  {
+    "feature": "price_sensitivity",
+    "importance_mean": 0.00264,
+    "importance_std": 0.001595
+  },
+  {
+    "feature": "historical_discount_response",
+    "importance_mean": 0.001859,
+    "importance_std": 0.001035
+  },
+  {
+    "feature": "channel",
+    "importance_mean": 0.000443,
+    "importance_std": 0.001045
+  },
+  {
+    "feature": "action_type",
+    "importance_mean": -0.000388,
+    "importance_std": 0.000967
+  },
+  {
+    "feature": "action_id",
+    "importance_mean": -0.000388,
+    "importance_std": 0.000967
+  },
+  {
+    "feature": "action_price",
+    "importance_mean": -0.000456,
+    "importance_std": 0.002294
+  },
+  {
+    "feature": "action_contact_cost",
+    "importance_mean": -0.000613,
+    "importance_std": 0.000637
+  },
+  {
+    "feature": "action_discount_cost",
+    "importance_mean": -0.001134,
+    "importance_std": 0.000324
+  },
+  {
+    "feature": "region",
+    "importance_mean": -0.003125,
+    "importance_std": 0.001748
+  }
+]

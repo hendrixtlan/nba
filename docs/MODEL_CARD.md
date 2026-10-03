@@ -1,25 +1,19 @@
-# Model Card — Propensity Model
+# Model card — NBA propensity model
 
 ## Intended use
-Estimate the probability that a customer/outlet will respond positively to a candidate commercial action. The score is one input to an expected-utility calculation and is not itself the final decision.
+Estimate action-specific response probability for already eligible candidate commercial actions. Probabilities feed a deterministic expected-utility calculation; the model does not directly execute customer actions.
 
-## Out of scope
-- Fully autonomous pricing changes.
-- Decisions using unapproved sensitive personal attributes.
-- Credit, employment, healthcare or other high-impact individual decisions.
-- Causal claims from the baseline propensity model.
+## Data
+Synthetic, non-personal portfolio data spanning January 2025 through September 2026. The generator includes seasonality and mild temporal distribution shift to exercise production monitoring patterns.
 
-## Inputs
-Behavioral, transaction-derived, channel, geography-at-business-region level, commercial-context and action attributes.
+## Evaluation design
+Chronological 70/15/15 train/validation/test split. Candidate selection occurs on validation data. Calibration uses validation data. The final test window remains untouched until the selected calibrated artifact is evaluated.
 
-## Output
-Probability in `[0, 1]` representing estimated response propensity.
+## Metrics
+See `artifacts/metrics.json` for ROC-AUC, PR-AUC, Brier score and log loss. Business acceptance requires online incremental-revenue and incremental-margin experiments; offline discrimination is insufficient.
 
-## Evaluation
-Baseline metrics: ROC-AUC, PR-AUC and Brier score. Production validation must use temporal or out-of-time splits, calibration analysis, cohort-level performance, stability tests and business experiments.
+## Limitations
+Synthetic data does not represent real commercial heterogeneity, regional policy, inventory dynamics, causal confounding or fairness risk. Scores must not be interpreted as real customer behavior.
 
-## Main limitations
-The baseline supervised target estimates association, not treatment effect. A customer with high predicted propensity may have purchased without intervention. Uplift or causal methods are required for incremental optimization.
-
-## Monitoring
-Track feature distribution shift, prediction distribution, calibration, performance by approved cohort, realized incremental outcome, decision mix and economic value.
+## Governance
+Every API decision carries model and policy versions. The model artifact is accompanied by a registry-style manifest and SHA-256 hash. `no_action` remains a valid policy outcome.

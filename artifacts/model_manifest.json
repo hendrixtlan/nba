@@ -1,0 +1,58 @@
+{
+  "model_id": "latam-nba-propensity",
+  "model_version": "logistic_regression-platt-v2",
+  "trained_at_utc": "2026-10-03T14:41:33.156245+00:00",
+  "artifact": "propensity.joblib",
+  "artifact_sha256": "dacec4a3de8e2f513fb678a7ac3fe18bb83807ef76224b6966dfaaf79cc95c10",
+  "features": [
+    "avg_ticket",
+    "purchase_frequency_30d",
+    "days_since_last_purchase",
+    "category_affinity",
+    "historical_discount_response",
+    "price_sensitivity",
+    "contact_count_7d",
+    "action_expected_margin",
+    "action_discount_cost",
+    "action_contact_cost",
+    "action_price",
+    "action_risk_penalty",
+    "channel",
+    "region",
+    "action_type",
+    "action_id"
+  ],
+  "target": "response",
+  "selection": {
+    "winner": "logistic_regression",
+    "metric": "validation_pr_auc_then_brier"
+  },
+  "calibration": "platt_sigmoid",
+  "test_metrics": {
+    "roc_auc": 0.636324,
+    "pr_auc": 0.661544,
+    "brier": 0.233073,
+    "log_loss": 0.658039,
+    "positive_rate": 0.546111,
+    "mean_prediction": 0.558285
+  },
+  "temporal_windows": {
+    "train": {
+      "rows": 8400,
+      "start": "2025-01-01T04:00:00+00:00",
+      "end": "2026-03-21T09:00:00+00:00"
+    },
+    "validation": {
+      "rows": 1800,
+      "start": "2026-03-21T10:00:00+00:00",
+      "end": "2026-06-24T04:00:00+00:00"
+    },
+    "test": {
+      "rows": 1800,
+      "start": "2026-06-24T05:00:00+00:00",
+      "end": "2026-09-30T23:00:00+00:00"
+    }
+  },
+  "data_classification": "synthetic_non_personal",
+  "intended_use": "rank eligible commercial actions by expected utility"
+}

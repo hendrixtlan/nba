@@ -1,0 +1,9 @@
+{
+  "randomized_experiment": true,
+  "test_rows": 1200,
+  "overall_observed_uplift": 0.072362,
+  "top20_observed_uplift": 0.141338,
+  "top20_mean_predicted_uplift": 0.125353,
+  "simulation_only_uplift_mae": 0.026775,
+  "note": "true_uplift exists only because this is synthetic data; a real deployment would use randomized experiments or causal identification assumptions."
+}

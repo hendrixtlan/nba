@@ -1,0 +1,105 @@
+{
+  "thresholds": {
+    "stable": "PSI < 0.10",
+    "watch": "0.10 <= PSI < 0.25",
+    "investigate": "PSI >= 0.25"
+  },
+  "features": [
+    {
+      "feature": "avg_ticket",
+      "type": "numeric",
+      "psi": 0.048033,
+      "status": "stable"
+    },
+    {
+      "feature": "category_affinity",
+      "type": "numeric",
+      "psi": 0.032111,
+      "status": "stable"
+    },
+    {
+      "feature": "price_sensitivity",
+      "type": "numeric",
+      "psi": 0.024866,
+      "status": "stable"
+    },
+    {
+      "feature": "purchase_frequency_30d",
+      "type": "numeric",
+      "psi": 0.019015,
+      "status": "stable"
+    },
+    {
+      "feature": "historical_discount_response",
+      "type": "numeric",
+      "psi": 0.019003,
+      "status": "stable"
+    },
+    {
+      "feature": "channel",
+      "type": "categorical",
+      "psi": 0.016092,
+      "status": "stable"
+    },
+    {
+      "feature": "days_since_last_purchase",
+      "type": "numeric",
+      "psi": 0.007494,
+      "status": "stable"
+    },
+    {
+      "feature": "contact_count_7d",
+      "type": "numeric",
+      "psi": 0.007268,
+      "status": "stable"
+    },
+    {
+      "feature": "action_type",
+      "type": "categorical",
+      "psi": 0.001969,
+      "status": "stable"
+    },
+    {
+      "feature": "action_id",
+      "type": "categorical",
+      "psi": 0.001969,
+      "status": "stable"
+    },
+    {
+      "feature": "action_expected_margin",
+      "type": "numeric",
+      "psi": 0.001968,
+      "status": "stable"
+    },
+    {
+      "feature": "region",
+      "type": "categorical",
+      "psi": 0.001462,
+      "status": "stable"
+    },
+    {
+      "feature": "action_price",
+      "type": "numeric",
+      "psi": 0.000449,
+      "status": "stable"
+    },
+    {
+      "feature": "action_discount_cost",
+      "type": "numeric",
+      "psi": 0.000369,
+      "status": "stable"
+    },
+    {
+      "feature": "action_contact_cost",
+      "type": "numeric",
+      "psi": 1e-06,
+      "status": "stable"
+    },
+    {
+      "feature": "action_risk_penalty",
+      "type": "numeric",
+      "psi": 0.0,
+      "status": "stable"
+    }
+  ]
+}

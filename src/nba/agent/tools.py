@@ -29,6 +29,10 @@ def explain_decision(decision: DecisionResponse) -> dict:
         "explanation_facts": [
             "The selected action had the highest eligible expected utility.",
             "Commercial policy constraints were evaluated before ranking.",
-            "The propensity score came from the registered decision model.",
+            *(
+                ["The propensity score came from the registered decision model."]
+                if selected.propensity is not None
+                else ["No-action is a deterministic fallback and has no response propensity score."]
+            ),
         ],
     }

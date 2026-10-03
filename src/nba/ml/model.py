@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Protocol
 
@@ -36,9 +37,13 @@ class HeuristicPropensityModel:
 
 
 class JoblibPropensityModel:
-    def __init__(self, path: Path, version: str = "sklearn-v1") -> None:
+    def __init__(self, path: Path, version: str | None = None) -> None:
         self.pipeline = joblib.load(path)
-        self.version = version
+        manifest_path = path.with_name("model_manifest.json")
+        manifest_version = None
+        if manifest_path.exists():
+            manifest_version = json.loads(manifest_path.read_text(encoding="utf-8")).get("model_version")
+        self.version = version or manifest_version or "sklearn-v1"
 
     def predict(self, customer: CustomerContext, action: CandidateAction) -> float:
         row = build_feature_row(customer, action)

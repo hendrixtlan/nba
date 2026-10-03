@@ -36,17 +36,19 @@ class DecisionEngine:
 
     def _score(self, customer: CustomerContext, action: CandidateAction) -> ScoredAction:
         reasons = self._eligibility(customer, action)
-        propensity = self.model.predict(customer, action)
-        gross_value = propensity * action.expected_margin
-        utility = gross_value - action.discount_cost - action.contact_cost - action.risk_penalty
-
         if action.action_type == "no_action":
+            propensity = None
+            gross_value = 0.0
             utility = 0.0
+        else:
+            propensity = self.model.predict(customer, action)
+            gross_value = propensity * action.expected_margin
+            utility = gross_value - action.discount_cost - action.contact_cost - action.risk_penalty
 
         return ScoredAction(
             action_id=action.action_id,
             action_type=action.action_type,
-            propensity=round(propensity, 6),
+            propensity=round(propensity, 6) if propensity is not None else None,
             gross_expected_value=round(gross_value, 4),
             expected_utility=round(utility, 4),
             eligible=not reasons,
