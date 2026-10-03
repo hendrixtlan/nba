@@ -1,0 +1,41 @@
+actions:
+  - action_id: promote_core_pack
+    action_type: product_recommendation
+    expected_margin: 9.00
+    discount_cost: 0.00
+    contact_cost: 0.25
+    price: 310.00
+    inventory_units: 500
+    risk_penalty: 0.00
+  - action_id: premium_bundle
+    action_type: bundle
+    expected_margin: 15.50
+    discount_cost: 1.50
+    contact_cost: 0.25
+    price: 385.00
+    inventory_units: 180
+    risk_penalty: 0.00
+  - action_id: targeted_discount
+    action_type: promotion
+    expected_margin: 7.50
+    discount_cost: 2.50
+    contact_cost: 0.20
+    price: 295.00
+    inventory_units: 420
+    risk_penalty: 0.05
+  - action_id: sales_visit
+    action_type: human_followup
+    expected_margin: 18.00
+    discount_cost: 0.00
+    contact_cost: 4.50
+    price: 0.00
+    inventory_units: 999999
+    risk_penalty: 0.00
+  - action_id: no_action
+    action_type: no_action
+    expected_margin: 0.00
+    discount_cost: 0.00
+    contact_cost: 0.00
+    price: 0.00
+    inventory_units: 999999
+    risk_penalty: 0.00

@@ -1,0 +1,6 @@
+{
+  "roc_auc_train": 0.6622,
+  "pr_auc_train": 0.6673,
+  "brier_train": 0.2295,
+  "warning": "Training-set metrics only; replace with temporal/out-of-time validation in production."
+}

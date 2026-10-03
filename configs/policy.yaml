@@ -1,0 +1,7 @@
+policy_version: "2026-10-03.1"
+max_contacts_7d: 2
+min_inventory_units: 10
+max_price_tolerance_multiplier: 1.15
+risk_penalty_threshold: 0.80
+allow_no_action: true
+minimum_utility: 0.25
