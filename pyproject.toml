@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "latam-nba-agent"
-version = "0.2.0"
+version = "0.3.0"
 description = "Production-shaped Next Best Action and agentic AI reference architecture"
 requires-python = ">=3.11"
 dependencies = [
@@ -32,7 +32,8 @@ dev = [
 ]
 azure = [
   "azure-identity>=1.19,<2",
-  "azure-storage-file-datalake>=12.18,<13"
+  "azure-storage-file-datalake>=12.18,<13",
+  "azure-ai-ml>=1.26,<2"
 ]
 
 [tool.setuptools.packages.find]

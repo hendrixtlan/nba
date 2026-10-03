@@ -13,3 +13,15 @@
 - Added deterministic sticky experiment assignment primitive.
 - Added dedicated ML validation GitHub Actions workflow.
 - Added container image definition for the inference API.
+
+
+## 0.3.0
+
+- Added Fabric Bronze/Silver/Gold notebook sources and governed data contracts.
+- Added immutable OneLake ML training snapshot publication pattern.
+- Added Azure ML OneLake datastore registration utility.
+- Added Azure ML command-job, custom model registration and managed online endpoint assets.
+- Added Entra-authenticated remote propensity adapter for the NBA API.
+- Refactored model training to accept mounted CSV/Parquet inputs and arbitrary output paths.
+- Added AI-ready dataset gates without inventing the employer-specific T1/T2/T3 rubric.
+- Added cloud asset validation workflow and architecture decision records.

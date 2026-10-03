@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 
 import joblib
-import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.inspection import permutation_importance
 from sklearn.linear_model import LogisticRegression
@@ -14,12 +14,13 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from nba.ml.calibration import PlattCalibratedClassifier
+from nba.ml.data_io import load_tabular_dataset
 from nba.ml.evaluation import binary_metrics, split_window, temporal_split
 from nba.ml.features import CATEGORICAL_FEATURES, NUMERIC_FEATURES
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "sample" / "training.csv"
-ARTIFACTS = ROOT / "artifacts"
+DEFAULT_DATA = ROOT / "data" / "sample" / "training.csv"
+DEFAULT_ARTIFACTS = ROOT / "artifacts"
 TARGET = "response"
 FEATURES = NUMERIC_FEATURES + CATEGORICAL_FEATURES
 
@@ -70,7 +71,14 @@ def _candidate_models() -> dict[str, Pipeline]:
         models["hist_gradient_boosting"] = Pipeline(
             [
                 ("pre", _preprocessor(scale_numeric=False)),
-                ("clf", HistGradientBoostingClassifier(max_iter=250, learning_rate=0.06, max_leaf_nodes=31)),
+                (
+                    "clf",
+                    HistGradientBoostingClassifier(
+                        max_iter=250,
+                        learning_rate=0.06,
+                        max_leaf_nodes=31,
+                    ),
+                ),
             ]
         )
     return models
@@ -80,8 +88,8 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def main() -> None:
-    df = pd.read_csv(DATA)
+def train(data_path: Path, artifacts_dir: Path, version_suffix: str = "v3") -> dict:
+    df = load_tabular_dataset(data_path)
     split = temporal_split(df)
     x_train, y_train = split.train[FEATURES], split.train[TARGET]
     x_val, y_val = split.validation[FEATURES], split.validation[TARGET]
@@ -117,15 +125,23 @@ def main() -> None:
     )
     importance = sorted(
         [
-            {"feature": feature, "importance_mean": round(float(mean), 6), "importance_std": round(float(std), 6)}
-            for feature, mean, std in zip(FEATURES, permutation.importances_mean, permutation.importances_std)
+            {
+                "feature": feature,
+                "importance_mean": round(float(mean), 6),
+                "importance_std": round(float(std), 6),
+            }
+            for feature, mean, std in zip(
+                FEATURES,
+                permutation.importances_mean,
+                permutation.importances_std,
+            )
         ],
         key=lambda row: row["importance_mean"],
         reverse=True,
     )
 
-    ARTIFACTS.mkdir(exist_ok=True)
-    model_path = ARTIFACTS / "propensity.joblib"
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
+    model_path = artifacts_dir / "propensity.joblib"
     joblib.dump(calibrated, model_path)
 
     metrics = {
@@ -139,12 +155,17 @@ def main() -> None:
             "test": split_window(split.test),
         },
         "calibration": "platt_sigmoid_on_validation_window",
-        "warning": "Synthetic portfolio data; test window was untouched during model selection and calibration.",
+        "warning": (
+            "Synthetic portfolio data; test window was untouched during model "
+            "selection and calibration."
+        ),
     }
-    (ARTIFACTS / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-    (ARTIFACTS / "feature_importance.json").write_text(json.dumps(importance, indent=2), encoding="utf-8")
+    (artifacts_dir / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    (artifacts_dir / "feature_importance.json").write_text(
+        json.dumps(importance, indent=2), encoding="utf-8"
+    )
 
-    version = f"{winner_name}-platt-v2"
+    version = f"{winner_name}-platt-{version_suffix}"
     manifest = {
         "model_id": "latam-nba-propensity",
         "model_version": version,
@@ -159,8 +180,25 @@ def main() -> None:
         "temporal_windows": metrics["temporal_windows"],
         "data_classification": "synthetic_non_personal",
         "intended_use": "rank eligible commercial actions by expected utility",
+        "training_source": str(data_path),
     }
-    (ARTIFACTS / "model_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    (artifacts_dir / "model_manifest.json").write_text(
+        json.dumps(manifest, indent=2), encoding="utf-8"
+    )
+    return metrics
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Train the NBA propensity model")
+    parser.add_argument("--data", type=Path, default=DEFAULT_DATA)
+    parser.add_argument("--artifacts-dir", type=Path, default=DEFAULT_ARTIFACTS)
+    parser.add_argument("--version-suffix", default="v3")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    metrics = train(args.data, args.artifacts_dir, args.version_suffix)
     print(json.dumps(metrics, indent=2))
 
 

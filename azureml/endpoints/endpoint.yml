@@ -1,0 +1,9 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
+name: latam-nba-propensity
+description: Managed real-time propensity scoring endpoint for the NBA decision service.
+auth_mode: aad_token
+identity:
+  type: system_assigned
+tags:
+  capability: next-best-action
+  auth: entra-id

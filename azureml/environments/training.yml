@@ -1,0 +1,8 @@
+$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
+name: nba-training
+description: Reproducible training environment for the LATAM NBA propensity model.
+image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest
+conda_file: conda.yml
+tags:
+  capability: next-best-action
+  lifecycle: training

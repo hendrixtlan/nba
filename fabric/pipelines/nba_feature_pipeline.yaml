@@ -1,0 +1,42 @@
+# Source-controlled orchestration specification. This is a reviewable contract,
+# not an exported Fabric item definition; workspace-specific item IDs stay out of Git.
+name: nba-feature-pipeline
+version: 1
+schedule:
+  cadence: daily
+  timezone: UTC
+activities:
+  - id: bronze_ingest
+    kind: fabric_notebook
+    source: fabric/notebooks/01_bronze_ingest.py
+    retries: 2
+  - id: silver_conform
+    kind: fabric_notebook
+    source: fabric/notebooks/02_silver_conform.py
+    depends_on: [bronze_ingest]
+    retries: 1
+  - id: gold_features
+    kind: fabric_notebook
+    source: fabric/notebooks/03_gold_training_features.py
+    depends_on: [silver_conform]
+  - id: quality_gate
+    kind: sql_assertions
+    source: fabric/sql/gold_quality_checks.sql
+    depends_on: [gold_features]
+    failure_policy: stop
+  - id: publish_snapshot
+    kind: fabric_notebook
+    source: fabric/notebooks/04_publish_training_snapshot.py
+    depends_on: [quality_gate]
+    failure_policy: stop
+outputs:
+  delta_table: gold.nba_training_features
+  snapshot_path: Files/ml/training/latest
+observability:
+  required_fields:
+    - pipeline_run_id
+    - activity_run_id
+    - rows_read
+    - rows_written
+    - quarantine_rows
+    - duration_ms

@@ -1,4 +1,4 @@
-.PHONY: install install-ml data train uplift drift explain pipeline test lint run demo
+.PHONY: install install-ml data train uplift drift explain pipeline test lint run demo validate-cloud
 
 install:
 	python -m pip install -e '.[dev]'
@@ -28,6 +28,9 @@ test:
 
 lint:
 	ruff check src tests scripts
+
+validate-cloud:
+	python scripts/validate_cloud_assets.py
 
 run:
 	uvicorn nba.api.app:app --reload

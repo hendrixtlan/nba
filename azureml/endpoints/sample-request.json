@@ -1,0 +1,22 @@
+{
+  "input_data": [
+    {
+      "avg_ticket": 350.0,
+      "purchase_frequency_30d": 6,
+      "days_since_last_purchase": 4,
+      "category_affinity": 0.82,
+      "historical_discount_response": 0.55,
+      "price_sensitivity": 0.42,
+      "contact_count_7d": 1,
+      "action_expected_margin": 12.0,
+      "action_discount_cost": 1.0,
+      "action_contact_cost": 0.5,
+      "action_price": 320.0,
+      "action_risk_penalty": 0.05,
+      "channel": "traditional_trade",
+      "region": "MX-CENTRAL",
+      "action_type": "product",
+      "action_id": "promote_core_pack"
+    }
+  ]
+}

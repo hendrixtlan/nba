@@ -1,7 +1,7 @@
 {
   "model_id": "latam-nba-propensity",
-  "model_version": "logistic_regression-platt-v2",
-  "trained_at_utc": "2026-10-03T14:41:33.156245+00:00",
+  "model_version": "logistic_regression-platt-v3",
+  "trained_at_utc": "2026-10-03T15:01:05.937299+00:00",
   "artifact": "propensity.joblib",
   "artifact_sha256": "dacec4a3de8e2f513fb678a7ac3fe18bb83807ef76224b6966dfaaf79cc95c10",
   "features": [
@@ -54,5 +54,6 @@
     }
   },
   "data_classification": "synthetic_non_personal",
-  "intended_use": "rank eligible commercial actions by expected utility"
+  "intended_use": "rank eligible commercial actions by expected utility",
+  "training_source": "/mnt/data/nba_v03/latam-next-best-action-agent/data/sample/training.csv"
 }

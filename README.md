@@ -1,6 +1,6 @@
 # LATAM Next Best Action + Agentic AI
 
-**Version 0.2 — Production Data Science**
+**Version 0.3 — Governed Data + Managed ML**
 
 Production-shaped reference implementation for a governed **Next Best Action (NBA)** decisioning system with an **agentic explanation and orchestration layer**.
 
@@ -83,7 +83,9 @@ configs/      Policy and use-case configuration
 docs/         Architecture, model card, governance and runbooks
 scripts/      Data generation and training entry points
 tests/        Unit and integration tests
-infra/        Azure/Fabric deployment placeholders
+fabric/       Fabric/OneLake notebooks, contracts and orchestration spec
+azureml/      Azure ML OneLake datastore, training, registry and endpoint assets
+infra/        Infrastructure-as-code evolution
 ```
 
 ## Local quick start
@@ -154,13 +156,14 @@ This project intentionally separates five forms of evaluation:
 - [x] FastAPI decision endpoint
 - [x] Agent-facing decision explanation tool
 - [x] Unit tests and CI
-- [ ] Fabric/OneLake production adapter
-- [ ] Azure ML managed training + model registry
+- [x] Fabric/OneLake governed medallion feature product
+- [x] Azure ML OneLake datastore + managed training contract
+- [x] Azure ML model registry + managed online endpoint assets
 - [ ] Microsoft Foundry hosted agent integration
 - [x] Uplift model / treatment-effect estimator baseline
 - [ ] Online experiment assignment and A/B measurement service
 - [ ] Model, data and agent observability dashboards
-- [ ] Infrastructure-as-code deployment
+- [ ] Full infrastructure-as-code deployment
 
 ## Design principles
 
@@ -198,3 +201,28 @@ See `docs/PRODUCTION_ML.md`, `docs/DRIFT_MONITORING.md`, and `docs/UPLIFT.md`.
 - `ci.yml` validates code quality and API/unit contracts.
 - `model-pipeline.yml` regenerates deterministic data, trains candidate models, evaluates uplift/drift/SHAP, runs tests, and publishes validation artifacts for review.
 - `Dockerfile` packages only the API source, configuration and selected model artifacts for inference.
+
+
+## v0.3 governed data and managed ML
+
+The v0.3 increment keeps the same decision contract while replacing local-only data/model
+surfaces with production-shaped Microsoft platform adapters:
+
+```text
+Sources
+  -> Fabric Bronze
+  -> Fabric Silver + quarantine
+  -> Fabric Gold ML feature product
+  -> immutable OneLake training snapshot
+  -> Azure ML OneLake datastore
+  -> managed training job
+  -> registered model
+  -> Entra-authenticated managed online endpoint
+  -> NBA decision service
+```
+
+The cloud artifacts are deliberately environment-neutral: tenant IDs, workspace IDs,
+Lakehouse IDs, subscriptions and secrets are not committed. See `fabric/README.md`,
+`azureml/README.md`, `docs/FABRIC_AZUREML.md` and `docs/AI_READY_DATASET.md`.
+
+Run `make validate-cloud` to validate the source-controlled JSON/YAML cloud contracts.

@@ -1,0 +1,25 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: latam-nba-propensity
+code: ../..
+command: >-
+  env PYTHONPATH=src python scripts/train_propensity_model.py
+  --data ${{inputs.training_data}}
+  --artifacts-dir ${{outputs.model_output}}
+  --version-suffix aml-v3
+inputs:
+  training_data:
+    type: uri_folder
+    path: azureml://datastores/nba_onelake/paths/ml/training/latest
+    mode: ro_mount
+outputs:
+  model_output:
+    type: custom_model
+    mode: rw_mount
+environment: azureml:nba-training@latest
+compute: azureml:cpu-cluster
+display_name: nba-propensity-train
+description: Train, select, calibrate and evaluate the governed NBA propensity model.
+tags:
+  capability: next-best-action
+  data_product: gold.nba_training_features
+  validation: temporal

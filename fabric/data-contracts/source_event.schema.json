@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:latam-nba:source-event:v1",
+  "title": "NBA source customer-action event",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "event_time",
+    "customer_id",
+    "channel",
+    "region",
+    "avg_ticket",
+    "purchase_frequency_30d",
+    "days_since_last_purchase",
+    "category_affinity",
+    "historical_discount_response",
+    "price_sensitivity",
+    "contact_count_7d",
+    "action_expected_margin",
+    "action_discount_cost",
+    "action_contact_cost",
+    "action_price",
+    "action_risk_penalty",
+    "action_type",
+    "action_id",
+    "response"
+  ],
+  "properties": {
+    "event_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "customer_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "channel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "region": {
+      "type": "string",
+      "minLength": 1
+    },
+    "avg_ticket": {
+      "type": "number",
+      "minimum": 0
+    },
+    "purchase_frequency_30d": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "days_since_last_purchase": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "category_affinity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "historical_discount_response": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "price_sensitivity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "contact_count_7d": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "action_expected_margin": {
+      "type": "number"
+    },
+    "action_discount_cost": {
+      "type": "number",
+      "minimum": 0
+    },
+    "action_contact_cost": {
+      "type": "number",
+      "minimum": 0
+    },
+    "action_price": {
+      "type": "number",
+      "minimum": 0
+    },
+    "action_risk_penalty": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "action_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "response": {
+      "type": "integer",
+      "enum": [
+        0,
+        1
+      ]
+    }
+  }
+}
