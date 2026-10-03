@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "latam-nba-agent"
-version = "0.3.0"
+version = "0.4.0"
 description = "Production-shaped Next Best Action and agentic AI reference architecture"
 requires-python = ">=3.11"
 dependencies = [
@@ -29,6 +29,16 @@ dev = [
   "httpx>=0.27,<1",
   "ruff>=0.7,<1",
   "mypy>=1.11,<2"
+]
+
+agent = [
+  "langgraph",
+  "langchain-core",
+  "langchain-azure-ai",
+  "azure-ai-projects>=2.4.0",
+  "azure-identity>=1.19,<2",
+  "opentelemetry-sdk",
+  "azure-core-tracing-opentelemetry"
 ]
 azure = [
   "azure-identity>=1.19,<2",

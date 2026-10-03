@@ -25,3 +25,17 @@
 - Refactored model training to accept mounted CSV/Parquet inputs and arbitrary output paths.
 - Added AI-ready dataset gates without inventing the employer-specific T1/T2/T3 rubric.
 - Added cloud asset validation workflow and architecture decision records.
+
+
+## 0.4.0 — Governed Agentic AI
+
+- Added versioned agent policy and governed semantic catalog.
+- Added deterministic local agent contract harness for CI/regression testing.
+- Added governed read tools for NBA, explanations, alternative comparison and semantic definitions.
+- Added approval-only action proposal that recomputes the governed NBA and never executes external writes.
+- Added Microsoft Foundry `AgentServiceFactory` prompt-agent integration with LangGraph-compatible orchestration.
+- Added curated offline agent evaluation set and quality thresholds.
+- Added Foundry cloud evaluation runner with agent-specific rubric plus coherence and violence evaluators.
+- Added agent trace/cost observability design and threat model.
+- Added dedicated agent-evaluation GitHub Actions workflow.
+- Added ADR-005 defining the agent as non-write authority.

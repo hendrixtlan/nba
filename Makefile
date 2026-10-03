@@ -1,10 +1,13 @@
-.PHONY: install install-ml data train uplift drift explain pipeline test lint run demo validate-cloud
+.PHONY: install install-ml install-agent data train uplift drift explain pipeline test lint run demo validate-cloud agent-eval
 
 install:
 	python -m pip install -e '.[dev]'
 
 install-ml:
 	python -m pip install -e '.[dev,ml]'
+
+install-agent:
+	python -m pip install -e '.[dev,agent]'
 
 data:
 	python scripts/generate_synthetic_data.py
@@ -34,3 +37,6 @@ validate-cloud:
 
 run:
 	uvicorn nba.api.app:app --reload
+
+agent-eval:
+	python scripts/evaluate_agent.py

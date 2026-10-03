@@ -1,6 +1,6 @@
 # LATAM Next Best Action + Agentic AI
 
-**Version 0.3 — Governed Data + Managed ML**
+**Version 0.4 — Governed Agentic AI**
 
 Production-shaped reference implementation for a governed **Next Best Action (NBA)** decisioning system with an **agentic explanation and orchestration layer**.
 
@@ -77,7 +77,7 @@ src/nba/
   domain/     Typed contracts and business entities
   services/   Candidate generation, constraints and ranking
   ml/         Training and inference code
-  agent/      Agent-facing governed tools
+  agent/      Governed tools, policy, semantic grounding and local contract harness
   adapters/   Local and cloud data/model adapters
 configs/      Policy and use-case configuration
 docs/         Architecture, model card, governance and runbooks
@@ -86,6 +86,8 @@ tests/        Unit and integration tests
 fabric/       Fabric/OneLake notebooks, contracts and orchestration spec
 azureml/      Azure ML OneLake datastore, training, registry and endpoint assets
 infra/        Infrastructure-as-code evolution
+foundry/      Microsoft Foundry + LangGraph agent and cloud evaluation
+evaluation/   Deterministic agent regression/evaluation set
 ```
 
 ## Local quick start
@@ -159,9 +161,10 @@ This project intentionally separates five forms of evaluation:
 - [x] Fabric/OneLake governed medallion feature product
 - [x] Azure ML OneLake datastore + managed training contract
 - [x] Azure ML model registry + managed online endpoint assets
-- [ ] Microsoft Foundry hosted agent integration
+- [x] Microsoft Foundry + LangGraph prompt-agent integration
 - [x] Uplift model / treatment-effect estimator baseline
 - [ ] Online experiment assignment and A/B measurement service
+- [x] Agent policy/evaluation/observability contracts
 - [ ] Model, data and agent observability dashboards
 - [ ] Full infrastructure-as-code deployment
 
@@ -226,3 +229,35 @@ Lakehouse IDs, subscriptions and secrets are not committed. See `fabric/README.m
 `azureml/README.md`, `docs/FABRIC_AZUREML.md` and `docs/AI_READY_DATASET.md`.
 
 Run `make validate-cloud` to validate the source-controlled JSON/YAML cloud contracts.
+
+
+## v0.4 governed Agentic AI
+
+The generative layer is now separated from the authoritative decision layer:
+
+```text
+Commercial User
+      |
+      v
+Microsoft Foundry Agent Service
+      |
+LangGraph-compatible prompt agent
+      |
+      +--> get_next_best_action --------> governed ML + policy
+      +--> explain_decision ------------> decision evidence
+      +--> compare_action_alternatives -> ranked/excluded alternatives
+      +--> get_business_definition -----> semantic catalog
+      +--> create_action_proposal ------> approval required, no external write
+```
+
+`LocalGovernedAgent` is an LLM-free contract harness used in CI. It validates intent routing, exact tool selection, evidence linkage, policy compliance, approval boundaries and budgets independently from model variability. The actual generative agent lives in `foundry/prompt_agent.py` and uses the same governed tools through Microsoft Foundry/`langchain-azure-ai`.
+
+Run the offline agent gate:
+
+```bash
+make agent-eval
+```
+
+The v0.4 reference build produced 100% pass rates across six curated deterministic cases after one routing regression was caught and corrected. See `docs/VALIDATION_V0.4.md`. Cloud Foundry evaluation is intentionally not claimed as executed without a real tenant, model deployment and RBAC.
+
+See `docs/AGENTIC_AI.md`, `docs/AGENT_EVALUATION.md`, `docs/AGENT_OBSERVABILITY.md`, and `docs/THREAT_MODEL_AGENT.md`.
